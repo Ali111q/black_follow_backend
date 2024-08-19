@@ -58,6 +58,15 @@ namespace BackEndStructuer.Controllers
                 return BadRequest(error);
 
             return Ok(category);
+        } 
+        [HttpGet( "/get-by-id")]
+        public async Task<ActionResult<Categories>> GetById([FromQuery] Guid id)
+        {
+            var (category, error) = await _categoriesServices.Delete(id);
+            if (error != null)
+                return BadRequest(error);
+
+            return Ok(category);
         }
     }
 }

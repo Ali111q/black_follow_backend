@@ -6,5 +6,9 @@ namespace BackEndStructuer.Entities
     {
         public string? Icon { get; set; }
         public string? Name { get; set; }
+
+        public Guid CategoriesId { get; set; }
+        public Categories Categories { get; set; }
+        public List<Service> Servi { get; set; }
     }
 }

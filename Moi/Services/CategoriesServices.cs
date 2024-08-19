@@ -12,6 +12,7 @@ namespace BackEndStructuer.Services
     public interface ICategoriesServices
     {
         Task<(Categories? categories, string? error)> Create(CategoriesForm categoriesForm);
+        Task<(CategoriesGetByIdDto? categories, string? error)> GetById(Guid Id);
         Task<(List<CategoriesDto> categories, int? totalCount, string? error)> GetAll(CategoriesFilter filter);
         Task<(Categories? categories, string? error)> Update(Guid id, CategoriesUpdate categoriesUpdate);
         Task<(Categories? categories, string? error)> Delete(Guid id);
@@ -46,12 +47,14 @@ namespace BackEndStructuer.Services
             }
         }
 
-        public async Task<(List<CategoriesDto> categories, int? totalCount, string? error)> GetAll(CategoriesFilter filter)
+        public async Task<(List<CategoriesDto> categories, int? totalCount, string? error)> GetAll(
+            CategoriesFilter filter)
         {
             try
             {
                 // Get all categories with filtering, pagination, and mapping to DTO
-                var data = await _repositoryWrapper.Categories.GetAll<CategoriesDto>(filter.PageNumber, filter.PageSize, filter.Deleted);
+                var data = await _repositoryWrapper.Categories.GetAll<CategoriesDto>(filter.PageNumber, filter.PageSize,
+                    filter.Deleted);
                 return (data.data, data.totalCount, null);
             }
             catch (Exception ex)
@@ -73,7 +76,7 @@ namespace BackEndStructuer.Services
                 }
 
                 // Map the update DTO to the existing entity
-               existingCategory= _mapper.Map(categoriesUpdate, existingCategory);
+                existingCategory = _mapper.Map(categoriesUpdate, existingCategory);
 
                 // Update the category in the repository
                 await _repositoryWrapper.Categories.Update(existingCategory);
@@ -94,6 +97,22 @@ namespace BackEndStructuer.Services
                 var deletedCategory = await _repositoryWrapper.Categories.SoftDelete(id);
 
                 return (deletedCategory, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<(CategoriesGetByIdDto? categories, string? error)> GetById(Guid Id)
+        {
+            try
+            {
+                // Get the category by ID with subcategories
+                var category = await _repositoryWrapper.Categories.GetById(Id);
+                var categoryDto = _mapper.Map<CategoriesGetByIdDto>(category);
+
+                return (categoryDto, null);
             }
             catch (Exception ex)
             {

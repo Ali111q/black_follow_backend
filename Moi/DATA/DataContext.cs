@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Reflection.Emit;
 using BackEndStructuer.Entities;
 using GaragesStructure.DATA.DTOs;
 using GaragesStructure.Entities;
@@ -37,7 +38,10 @@ public DbSet<Categories> Categoriess { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RolePermission>().HasKey(rp => new { rp.RoleId, rp.PermissionId });
-
+            modelBuilder.Entity<AppUser>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<AppUser>().HasIndex(u => u.Username).IsUnique();
+            modelBuilder.Entity<SubCategory>().HasOne<Categories>(S=>S.Categories).WithMany(C=>C.SubCategories).HasForeignKey(S=>S.CategoriesId);
+            modelBuilder.Entity<Service>().HasOne<SubCategory>(S=>S.SubCategory).WithMany(C=>C.Servi).HasForeignKey(S=>S.SubCategoryId);
             // new DbInitializer(modelBuilder).Seed();
         }
 

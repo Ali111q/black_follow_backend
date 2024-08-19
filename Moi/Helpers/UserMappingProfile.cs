@@ -53,6 +53,7 @@ CreateMap<SubCategoryUpdate,SubCategory>().ForAllMembers(opts => opts.Condition(
 CreateMap<Categories, CategoriesDto>();
 CreateMap<CategoriesForm,Categories>();
 CreateMap<CategoriesUpdate,Categories>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<Categories, CategoriesGetByIdDto>();
 
         }
     }
