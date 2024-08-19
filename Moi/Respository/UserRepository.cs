@@ -3,11 +3,12 @@ using AutoMapper;
 using GaragesStructure.DATA;
 using GaragesStructure.Entities;
 using GaragesStructure.Interface;
-using GaragesStructure.Utils;
+using GaragesStructure.Respository.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace GaragesStructure.Repository{
+namespace GaragesStructure.Repository
+{
     public class UserRepository : GenericRepository<AppUser, Guid>, IUserRepository{
         private readonly DataContext _context;
         private readonly IMapper _mapper;

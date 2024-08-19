@@ -1,11 +1,11 @@
 using System.Security.Claims;
-using GaragesStructure.Utils;
+using GaragesStructure.Respository.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GaragesStructure.Properties
 {
-  
-        [ApiController]
+
+    [ApiController]
         [Route("api/[controller]")]
         public abstract class BaseController : ControllerBase {
             protected virtual string GetClaim(string claimName) {

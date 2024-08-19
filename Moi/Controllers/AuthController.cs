@@ -1,4 +1,3 @@
-using GaragesStructure.Utils;
 using GaragesStructure.DATA.DTOs.User;
 using GaragesStructure.Services;
 using Microsoft.AspNetCore.Authorization;

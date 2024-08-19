@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using GaragesStructure.Utils;
+using GaragesStructure.Respository.Utils;
 
 namespace GaragesStructure.Entities
 {
-    
+
 
     public class Notifications : BaseEntity<Guid>
     {

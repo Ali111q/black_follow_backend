@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GaragesStructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240819151536_my")]
-    partial class my
+    [Migration("20240819164533_newdatacd")]
+    partial class newdatacd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,12 @@ namespace GaragesStructure.Migrations
                     b.Property<bool?>("Deleted")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categoriess");
@@ -48,11 +54,28 @@ namespace GaragesStructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool?>("Deleted")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -71,6 +94,21 @@ namespace GaragesStructure.Migrations
                     b.Property<bool?>("Deleted")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Maximum")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Minimum")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<decimal?>("ServicePrice")
+                        .HasColumnType("numeric");
+
                     b.HasKey("Id");
 
                     b.ToTable("Services");
@@ -87,6 +125,12 @@ namespace GaragesStructure.Migrations
 
                     b.Property<bool?>("Deleted")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

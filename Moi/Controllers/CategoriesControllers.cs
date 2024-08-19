@@ -1,39 +1,63 @@
-
-using BackEndStructuer.DATA.DTOs;
-using BackEndStructuer.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using BackEndStructuer.DATA.DTOs;
 using BackEndStructuer.Entities;
-using System.Threading.Tasks;
+using BackEndStructuer.Services;
 using GaragesStructure.Controllers;
+using GaragesStructure.Respository.Utils;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BackEndStructuer.Controllers
 {
-    public class CategoriessController : BaseController
+    public class CategoriesController : BaseController
     {
         private readonly ICategoriesServices _categoriesServices;
 
-        public CategoriessController(ICategoriesServices categoriesServices)
+        public CategoriesController(ICategoriesServices categoriesServices)
         {
             _categoriesServices = categoriesServices;
         }
 
-        [Authorize]
         [HttpGet]
-        public async Task<ActionResult<List<CategoriesDto>>> GetAll([FromQuery] CategoriesFilter filter) => Ok(await _categoriesServices.GetAll(filter) , filter.PageNumber , filter.PageSize);
+        public async Task<ActionResult<List<CategoriesDto>>> GetAll([FromQuery] CategoriesFilter filter)
+        {
+            var (categories, totalCount, error) = await _categoriesServices.GetAll(filter);
+            if (error != null)
+                return BadRequest(error);
 
-        [Authorize]
+            Response.Headers.Add("X-Total-Count", totalCount?.ToString());
+            return Ok(categories);
+        }
+
         [HttpPost]
-        public async Task<ActionResult<Categories>> Create([FromBody] CategoriesForm categoriesForm) => Ok(await _categoriesServices.Create(categoriesForm));
+        public async Task<ActionResult<Categories>> Create([FromBody] CategoriesForm categoriesForm)
+        {
+            var (category, error) = await _categoriesServices.Create(categoriesForm);
+            if (error != null)
+                return BadRequest(error);
 
-        [Authorize]
+            return Ok(category);
+        }
+
         [HttpPut("{id}")]
-        public async Task<ActionResult<Categories>> Update([FromBody] CategoriesUpdate categoriesUpdate, Guid id) => Ok(await _categoriesServices.Update(id , categoriesUpdate));
+        public async Task<ActionResult<Categories>> Update([FromBody] CategoriesUpdate categoriesUpdate, Guid id)
+        {
+            var (category, error) = await _categoriesServices.Update(id, categoriesUpdate);
+            if (error != null)
+                return BadRequest(error);
 
-        [Authorize]
+            return Ok(category);
+        }
+
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Categories>> Delete(Guid id) =>  Ok( await _categoriesServices.Delete(id));
-        
+        public async Task<ActionResult<Categories>> Delete(Guid id)
+        {
+            var (category, error) = await _categoriesServices.Delete(id);
+            if (error != null)
+                return BadRequest(error);
+
+            return Ok(category);
+        }
     }
 }

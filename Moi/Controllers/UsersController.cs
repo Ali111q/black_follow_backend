@@ -1,7 +1,7 @@
 using GaragesStructure.DATA.DTOs.User;
 using GaragesStructure.Helpers;
+using GaragesStructure.Respository.Utils;
 using GaragesStructure.Services;
-using GaragesStructure.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GaragesStructure.Controllers;

@@ -1,10 +1,10 @@
 using BackEndStructuer.Entities;
 using GaragesStructure.Interface;
+using System;
 
 namespace BackEndStructuer.Interface
 {
-    public interface ICategoriesRepository : IGenericRepository<Categories , Guid>
+    public interface ICategoriesRepository : IGenericRepository<Categories, Guid>
     {
-         
     }
 }

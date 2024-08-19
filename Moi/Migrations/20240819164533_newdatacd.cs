@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GaragesStructure.Migrations
 {
     /// <inheritdoc />
-    public partial class my : Migration
+    public partial class newdatacd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,6 +16,8 @@ namespace GaragesStructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Icon = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -65,6 +67,11 @@ namespace GaragesStructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Link = table.Column<string>(type: "text", nullable: false),
+                    Count = table.Column<int>(type: "integer", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    State = table.Column<string>(type: "text", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Deleted = table.Column<bool>(type: "boolean", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -108,6 +115,11 @@ namespace GaragesStructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Icon = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Minimum = table.Column<string>(type: "text", nullable: true),
+                    Maximum = table.Column<string>(type: "text", nullable: true),
+                    ServicePrice = table.Column<decimal>(type: "numeric", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -121,6 +133,8 @@ namespace GaragesStructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Icon = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: true),
                     Deleted = table.Column<bool>(type: "boolean", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
