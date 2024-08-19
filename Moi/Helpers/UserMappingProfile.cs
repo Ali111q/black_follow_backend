@@ -1,5 +1,7 @@
 using System.Text.Json.Nodes;
 using AutoMapper;
+using BackEndStructuer.DATA.DTOs;
+using BackEndStructuer.Entities;
 using GaragesStructure.DATA.DTOs.Country;
 using GaragesStructure.DATA.DTOs.roles;
 using GaragesStructure.DATA.DTOs.User;

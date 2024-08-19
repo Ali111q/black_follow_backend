@@ -2,6 +2,8 @@ using AutoMapper;
 using BackEndStructuer.DATA;
 using BackEndStructuer.Entities;
 using BackEndStructuer.Interface;
+using GaragesStructure.DATA;
+using GaragesStructure.Repository;
 
 namespace BackEndStructuer.Repository
 {

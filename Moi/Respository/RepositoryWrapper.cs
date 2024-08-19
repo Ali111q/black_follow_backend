@@ -1,4 +1,6 @@
 using AutoMapper;
+using BackEndStructuer.Interface;
+using BackEndStructuer.Repository;
 using GaragesStructure.DATA;
 using GaragesStructure.Interface;
 

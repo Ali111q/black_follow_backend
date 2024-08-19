@@ -4,6 +4,7 @@ using BackEndStructuer.DATA.DTOs;
 using BackEndStructuer.Entities;
 using BackEndStructuer.Repository;
 using BackEndStructuer.Services;
+using GaragesStructure.Repository;
 
 namespace BackEndStructuer.Services;
 
