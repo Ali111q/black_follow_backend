@@ -12,6 +12,7 @@ public interface ISubCategoryServices
     Task<(SubCategory? subcategory, string? error)> Create(SubCategoryForm subcategoryForm);
     Task<(List<SubCategoryDto> subcategorys, int? totalCount, string? error)> GetAll(SubCategoryFilter filter);
     Task<(SubCategory? subcategory, string? error)> Update(Guid id, SubCategoryUpdate subcategoryUpdate);
+    Task<(SubCategoryByIdDto? subcategory, string? error)> GetById(Guid id);
     Task<(SubCategory? subcategory, string? error)> Delete(Guid id);
 }
 
@@ -59,6 +60,14 @@ public class SubCategoryServices : ISubCategoryServices
        
     }
 
+    public async Task<(SubCategoryByIdDto? subcategory, string? error)> GetById(Guid id)
+    {
+        var subcategory = await _repositoryWrapper.SubCategory.GetById(id);
+        if (subcategory == null) return (null, "SubCategory not found");
+
+        var subcategoryDto = _mapper.Map<SubCategoryByIdDto>(subcategory);
+        return (subcategoryDto, null);
+    }
     public async Task<(SubCategory? subcategory, string? error)> Delete(Guid id)
     {
 

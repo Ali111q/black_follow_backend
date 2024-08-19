@@ -49,6 +49,7 @@ CreateMap<ServiceForm,Service>();
 CreateMap<ServiceUpdate,Service>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<SubCategory, SubCategoryDto>();
 CreateMap<SubCategoryForm,SubCategory>();
+CreateMap<SubCategory, SubCategoryByIdDto>();
 CreateMap<SubCategoryUpdate,SubCategory>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 CreateMap<Categories, CategoriesDto>();
 CreateMap<CategoriesForm,Categories>();

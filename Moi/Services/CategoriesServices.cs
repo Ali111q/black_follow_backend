@@ -53,9 +53,9 @@ namespace BackEndStructuer.Services
             try
             {
                 // Get all categories with filtering, pagination, and mapping to DTO
-                var data = await _repositoryWrapper.Categories.GetAll<CategoriesDto>(filter.PageNumber, filter.PageSize,
+                var (data, count) = await _repositoryWrapper.Categories.GetAll<CategoriesDto>(filter.PageNumber, filter.PageSize,
                     filter.Deleted);
-                return (data.data, data.totalCount, null);
+                return (data, count, null);
             }
             catch (Exception ex)
             {

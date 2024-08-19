@@ -9,6 +9,6 @@ namespace BackEndStructuer.Entities
 
         public Guid CategoriesId { get; set; }
         public Categories Categories { get; set; }
-        public List<Service> Servi { get; set; }
+        public List<Service> Services { get; set; }
     }
 }
