@@ -68,6 +68,7 @@ namespace GaragesStructure.Services{
                 Email = registerForm.Email,
                 FullName = registerForm.FullName,
                 Password = BCrypt.Net.BCrypt.HashPassword(registerForm.Password),
+                Username = registerForm.Username,
             };
             // set role 
             newUser.RoleId = role.Id;
