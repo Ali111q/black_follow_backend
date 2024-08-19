@@ -20,6 +20,10 @@ namespace GaragesStructure.DATA
 
 
         // here to add
+public DbSet<Order> Orders { get; set; }
+public DbSet<Service> Services { get; set; }
+public DbSet<SubCategory> SubCategorys { get; set; }
+public DbSet<Categories> Categoriess { get; set; }
         public DbSet<LoginLogger> LoginLoggers { get; set; }
 
         public DbSet<Country> Countries { get; set; }

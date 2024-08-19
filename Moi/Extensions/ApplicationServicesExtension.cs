@@ -42,6 +42,10 @@ namespace GaragesStructure.Extensions
 
 
             // here to add
+services.AddScoped<IOrderServices, OrderServices>();
+services.AddScoped<IServiceServices, ServiceServices>();
+services.AddScoped<ISubCategoryServices, SubCategoryServices>();
+services.AddScoped<ICategoriesServices, CategoriesServices>();
        
             services.AddScoped<IFileService, FileService>();
            

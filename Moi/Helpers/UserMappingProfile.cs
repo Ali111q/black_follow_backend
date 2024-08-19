@@ -39,6 +39,18 @@ namespace GaragesStructure.Helpers
 
 
             // here to add
+CreateMap<Order, OrderDto>();
+CreateMap<OrderForm,Order>();
+CreateMap<OrderUpdate,Order>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<Service, ServiceDto>();
+CreateMap<ServiceForm,Service>();
+CreateMap<ServiceUpdate,Service>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<SubCategory, SubCategoryDto>();
+CreateMap<SubCategoryForm,SubCategory>();
+CreateMap<SubCategoryUpdate,SubCategory>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+CreateMap<Categories, CategoriesDto>();
+CreateMap<CategoriesForm,Categories>();
+CreateMap<CategoriesUpdate,Categories>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
         }
     }

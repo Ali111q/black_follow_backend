@@ -78,6 +78,46 @@ namespace GaragesStructure.Repository
 
 
         // here to add
+private IOrderRepository _Order;
+
+public IOrderRepository Order {
+    get {
+        if(_Order == null) {
+            _Order = new OrderRepository(_context, _mapper);
+        }
+        return _Order;
+    }
+}
+private IServiceRepository _Service;
+
+public IServiceRepository Service {
+    get {
+        if(_Service == null) {
+            _Service = new ServiceRepository(_context, _mapper);
+        }
+        return _Service;
+    }
+}
+private ISubCategoryRepository _SubCategory;
+
+public ISubCategoryRepository SubCategory {
+    get {
+        if(_SubCategory == null) {
+            _SubCategory = new SubCategoryRepository(_context, _mapper);
+        }
+        return _SubCategory;
+    }
+}
+private ICategoriesRepository _Categories;
+
+public ICategoriesRepository Categories {
+    get {
+        if(_Categories == null) {
+            _Categories = new CategoriesRepository(_context, _mapper);
+        }
+        return _Categories;
+    }
+}
 
         
         private INotificationRepository _Notification;
