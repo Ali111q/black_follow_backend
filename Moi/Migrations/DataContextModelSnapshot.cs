@@ -51,6 +51,9 @@ namespace GaragesStructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("AppUserId")
+                        .HasColumnType("uuid");
+
                     b.Property<int>("Count")
                         .HasColumnType("integer");
 
@@ -75,6 +78,8 @@ namespace GaragesStructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("Orders");
                 });
@@ -140,6 +145,12 @@ namespace GaragesStructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("Account")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("numeric");
+
                     b.Property<Guid?>("CountryId")
                         .HasColumnType("uuid");
 
@@ -163,6 +174,9 @@ namespace GaragesStructure.Migrations
 
                     b.Property<Guid?>("RoleId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -333,17 +347,22 @@ namespace GaragesStructure.Migrations
                     b.ToTable("RolePermissions");
                 });
 
+            modelBuilder.Entity("BackEndStructuer.Entities.Order", b =>
+                {
+                    b.HasOne("GaragesStructure.Entities.AppUser", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("AppUserId");
+                });
+
             modelBuilder.Entity("GaragesStructure.Entities.AppUser", b =>
                 {
-                    b.HasOne("GaragesStructure.Entities.Country", "Country")
+                    b.HasOne("GaragesStructure.Entities.Country", null)
                         .WithMany("Users")
                         .HasForeignKey("CountryId");
 
                     b.HasOne("GaragesStructure.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId");
-
-                    b.Navigation("Country");
 
                     b.Navigation("Role");
                 });
@@ -374,6 +393,11 @@ namespace GaragesStructure.Migrations
                     b.Navigation("Permission");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("GaragesStructure.Entities.AppUser", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("GaragesStructure.Entities.Country", b =>
