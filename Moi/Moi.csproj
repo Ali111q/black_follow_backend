@@ -43,7 +43,6 @@
     <ItemGroup>
         <Folder Include="DATA\Migrations\" />
         <Folder Include="Helpers\HangFire\" />
-        <Folder Include="Migrations\" />
         <Folder Include="View\" />
         <Folder Include="wwwroot\Attachments\" />
         <Folder Include="wwwroot\Logo\" />
