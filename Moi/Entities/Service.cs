@@ -12,6 +12,7 @@ namespace BackEndStructuer.Entities
         public decimal? ServicePrice { get; set; }
         public Guid SubCategoryId { get; set; }
         public SubCategory SubCategory { get; set; }
+        public List<Order> Orders { get; set; }
         
     }
 }

@@ -42,6 +42,7 @@ public DbSet<Categories> Categoriess { get; set; }
             modelBuilder.Entity<AppUser>().HasIndex(u => u.Username).IsUnique();
             modelBuilder.Entity<SubCategory>().HasOne<Categories>(S=>S.Categories).WithMany(C=>C.SubCategories).HasForeignKey(S=>S.CategoriesId);
             modelBuilder.Entity<Service>().HasOne<SubCategory>(S=>S.SubCategory).WithMany(C=>C.Servi).HasForeignKey(S=>S.SubCategoryId);
+            modelBuilder.Entity<Order>().HasOne<Service>(S=>S.Service).WithMany(C=>C.Orders).HasForeignKey(S=>S.ServiceId);
             // new DbInitializer(modelBuilder).Seed();
         }
 
