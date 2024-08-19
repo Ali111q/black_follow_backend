@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GaragesStructure.Controllers;
 
-[ServiceFilter(typeof(AuthorizeActionFilter))]
 
 public class UsersController : BaseController{
     private readonly IUserService _userService;

@@ -16,10 +16,14 @@ namespace GaragesStructure.DATA.DTOs.User
         [Required]
         [MinLength(2, ErrorMessage = "FullName must be at least 2 characters")]
         public string? FullName { get; set; }
+        
+        [Required] 
+        public string? Username { get; set; }
+        
 
         [Required]
         public Guid? Role { get; set; }
-        public Guid? GarageId { get; set; }
+
 
     }
 }
@@ -32,5 +36,6 @@ public  class RegisterFormValidator : AbstractValidator<RegisterForm>
         RuleFor(x => x.Email).NotNull().NotEmpty();
         RuleFor(x => x.FullName).NotNull().NotEmpty();
         RuleFor(x => x.Role).NotNull().NotEmpty();
+        RuleFor(x=>x.Username).NotNull().NotEmpty();
     }
 }

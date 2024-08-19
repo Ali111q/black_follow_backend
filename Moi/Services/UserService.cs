@@ -38,7 +38,7 @@ namespace GaragesStructure.Services{
         }
 
         public async Task<(UserDto? user, string? error)> Login(LoginForm loginForm) {
-            var user = await _repositoryWrapper.User.Get(u => u.Email == loginForm.Email, i => i.Include(x => x.Role));
+            var user = await _repositoryWrapper.User.Get(u => u.Username == loginForm.Username, i => i.Include(x => x.Role));
             if (user == null) return (null, "User not found");
             if (user.IsActive == false) return (null, "User is not active");
             if (!BCrypt.Net.BCrypt.Verify(loginForm.Password, user.Password)) return (null, "Wrong password");
@@ -60,7 +60,9 @@ namespace GaragesStructure.Services{
 
          
             var user = await _repositoryWrapper.User.Get(u => u.Email == registerForm.Email);
-            if (user != null) return (null, "User already exists");
+            if (user != null) return (null, "Email already exists");
+             user = await _repositoryWrapper.User.Get(u => u.Username == registerForm.Username);
+            if (user != null) return (null, "Username already exists");
             var newUser = new AppUser
             {
                 Email = registerForm.Email,
