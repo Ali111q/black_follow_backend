@@ -6,7 +6,7 @@ using GaragesStructure.DATA;
 using GaragesStructure.Helpers;
 using GaragesStructure.Repository;
 using GaragesStructure.Services;
-
+using GaragesStructure.Services.Referances;
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Hangfire.PostgreSql;
@@ -40,6 +40,7 @@ namespace GaragesStructure.Extensions
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<AuthorizeActionFilter>();
             services.AddScoped<ICountryService, CountryService>();
+            services.AddScoped<ITrendfyiqService, TrendfyiqService>();
 
 
             // here to add
@@ -62,14 +63,14 @@ services.AddScoped<ICategoriesServices, CategoriesServices>();
             
             // seed data from permission seeder service
 
-            var serviceProvider = services.BuildServiceProvider();
+            // var serviceProvider = services.BuildServiceProvider();
 
 
-            var permissionSeeder = serviceProvider.GetService<PermissionSeeder>();
-            permissionSeeder.SeedPermissions();
-
-            var roles = serviceProvider.GetService<RoleSeeder>();
-            roles.AddRole();
+            // var permissionSeeder = serviceProvider.GetService<PermissionSeeder>();
+            // permissionSeeder.SeedPermissions();
+            //
+            // var roles = serviceProvider.GetService<RoleSeeder>();
+            // roles.AddRole();
 
 
             return services;

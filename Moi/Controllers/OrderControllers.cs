@@ -23,7 +23,7 @@ namespace BackEndStructuer.Controllers
         [HttpGet]
         public async Task<ActionResult<List<OrderDto>>> GetAll([FromQuery] OrderFilter filter) => Ok(await _orderServices.GetAll(filter) , filter.PageNumber , filter.PageSize);
 
-        [Authorize]
+        // [Authorize]
         [HttpPost]
         public async Task<ActionResult<Order>> Create([FromBody] OrderForm orderForm) => Ok(await _orderServices.Create(orderForm));
 
