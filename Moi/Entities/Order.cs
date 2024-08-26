@@ -14,5 +14,7 @@ namespace BackEndStructuer.Entities
         public AppUser User { get; set; }
         public Guid ServiceId { get; set; }
         public Service Service { get; set; }
+        public FinancialMovement FinancialMovement { get; set; }
+        public Guid FinancialMovementId { get; set; }
     }
 }

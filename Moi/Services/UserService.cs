@@ -19,6 +19,8 @@ namespace GaragesStructure.Services{
         Task<(List<UserDto>? user, int? totalCount, string? error)> GetAll(UserFilter filter);
 
         Task<(AppUser? user, string? error)> ChangeUserState(Guid id, bool isActive);
+        
+        Task<(decimal? balance, string? error)> GetBalance(Guid id);
 
     }
 
@@ -144,6 +146,13 @@ namespace GaragesStructure.Services{
             user.IsActive = isActive;
             await _repositoryWrapper.User.UpdateUser(user);
             return (user, null);
+        }
+
+        public async Task<(decimal? balance, string? error)> GetBalance(Guid id)
+        {
+            var user = await _repositoryWrapper.User.GetById(id);
+            if (user == null) return (null, "User not found");
+            return (user.Balance, null);
         }
     }
 }

@@ -80,6 +80,17 @@ namespace GaragesStructure.Repository
 
 
         // here to add
+private IFinancialMovementRepository _FinancialMovement;
+
+public IFinancialMovementRepository FinancialMovement {
+    get {
+        if(_FinancialMovement == null) {
+            _FinancialMovement = new FinancialMovementRepository(_context, _mapper);
+        }
+        return _FinancialMovement;
+    }
+}
+
 private IOrderRepository _Order;
 
 public IOrderRepository Order {

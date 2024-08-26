@@ -25,7 +25,7 @@ namespace BackEndStructuer.Controllers
 
         // [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Order>> Create([FromBody] OrderForm orderForm) => Ok(await _orderServices.Create(orderForm));
+        public async Task<ActionResult<Order>> Create([FromBody] OrderForm orderForm) => Ok(await _orderServices.Create(orderForm, Id));
 
         [Authorize]
         [HttpPut("{id}")]

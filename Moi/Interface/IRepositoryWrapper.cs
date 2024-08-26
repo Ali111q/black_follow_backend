@@ -11,6 +11,8 @@ namespace GaragesStructure.Repository
         IRoleRepository Role { get; }
 
         // here to add
+IFinancialMovementRepository FinancialMovement{get;}
+
 IOrderRepository Order{get;}
 IServiceRepository Service{get;}
 ISubCategoryRepository SubCategory{get;}

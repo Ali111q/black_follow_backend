@@ -19,7 +19,7 @@ namespace GaragesStructure.Entities
         
         public bool? IsActive { get; set; } = true;
         public List<Order> Orders { get; set; } 
-
+        public List<FinancialMovement> FinancialMovements { get; set; }
 
 
         

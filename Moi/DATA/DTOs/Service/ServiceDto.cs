@@ -7,7 +7,7 @@ namespace BackEndStructuer.DATA.DTOs
         public string? Name { get; set; }
         public string? Minimum { get; set; }
         public string? Maximum { get; set; }
-
+        public string? Description { get; set; }
         public decimal? ServicePrice { get; set; }
     }
 }

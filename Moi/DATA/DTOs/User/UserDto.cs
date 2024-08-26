@@ -11,7 +11,7 @@ namespace GaragesStructure.DATA.DTOs.User
         public string Email { get; set; }
         public RoleDto? Role { get; set; }
         public string Token { get; set; }
-
+        public string Username { get; set; }
         public CountryDto? Country { get; set; }
         
         public bool? IsActive { get; set; }

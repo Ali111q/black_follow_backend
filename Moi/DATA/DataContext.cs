@@ -3,6 +3,7 @@ using System.Reflection.Emit;
 using BackEndStructuer.Entities;
 using GaragesStructure.DATA.DTOs;
 using GaragesStructure.Entities;
+using iTextSharp.text;
 using Microsoft.EntityFrameworkCore;
 
 namespace GaragesStructure.DATA
@@ -21,10 +22,12 @@ namespace GaragesStructure.DATA
 
 
         // here to add
-public DbSet<Order> Orders { get; set; }
-public DbSet<Service> Services { get; set; }
-public DbSet<SubCategory> SubCategorys { get; set; }
-public DbSet<Categories> Categoriess { get; set; }
+public DbSet<FinancialMovement> FinancialMovements { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Service> Services { get; set; }
+        public DbSet<SubCategory> SubCategorys { get; set; }
+        public DbSet<Categories> Categoriess { get; set; }
         public DbSet<LoginLogger> LoginLoggers { get; set; }
 
         public DbSet<Country> Countries { get; set; }
@@ -40,13 +43,76 @@ public DbSet<Categories> Categoriess { get; set; }
             modelBuilder.Entity<RolePermission>().HasKey(rp => new { rp.RoleId, rp.PermissionId });
             modelBuilder.Entity<AppUser>().HasIndex(u => u.Email).IsUnique();
             modelBuilder.Entity<AppUser>().HasIndex(u => u.Username).IsUnique();
-            modelBuilder.Entity<SubCategory>().HasOne<Categories>(S=>S.Categories).WithMany(C=>C.SubCategories).HasForeignKey(S=>S.CategoriesId);
-            modelBuilder.Entity<Service>().HasOne<SubCategory>(S=>S.SubCategory).WithMany(C=>C.Services).HasForeignKey(S=>S.SubCategoryId);
-            modelBuilder.Entity<Order>().HasOne<Service>(S=>S.Service).WithMany(C=>C.Orders).HasForeignKey(S=>S.ServiceId);
+            modelBuilder.Entity<SubCategory>().HasOne<Categories>(S => S.Categories).WithMany(C => C.SubCategories)
+                .HasForeignKey(S => S.CategoriesId);
+            modelBuilder.Entity<Service>().HasOne<SubCategory>(S => S.SubCategory).WithMany(C => C.Services)
+                .HasForeignKey(S => S.SubCategoryId);
+            modelBuilder.Entity<Order>().HasOne<Service>(S => S.Service).WithMany(C => C.Orders)
+                .HasForeignKey(S => S.ServiceId);
+
+            modelBuilder.Entity<FinancialMovement>().HasOne<AppUser>(S => S.User).WithMany(C => C.FinancialMovements)
+                .HasForeignKey(S => S.UserId);
+
+            modelBuilder.Entity<Role>().HasData(
+                new List<Role>()
+                {
+                    new Role()
+                    {
+                        Id = Guid.Parse("395849e7-033a-4ca0-8f7c-fc03d0943daa"),
+                        Name = "User",
+                    },
+                    new Role()
+                    {
+                        Id = Guid.Parse("395849e7-033a-4ca0-8f7c-fc03d0943dab"),
+                        Name = "Admin",
+                    }
+                }
+            );
+
+            modelBuilder.Entity<AppUser>().HasData(new AppUser()
+            {
+                Id = Guid.Parse("395849e7-033a-4ca0-8f7c-fc03d0eeedaa"),
+                Email = "bbbeat114@gmail.com",
+                FullName = "ali",
+                Username = "ali",
+                Password = BCrypt.Net.BCrypt.HashPassword("10109989"),
+                RoleId = Guid.Parse("395849e7-033a-4ca0-8f7c-fc03d0943daa"),
+                
+            });
+            var categoryId = Guid.Parse("395849e7-033a-4ca0-8f7c-fc03d0eecdaa");
+            modelBuilder.Entity<Categories>().HasData(new Categories()
+            {
+                Id =categoryId ,
+                Name = "Facebook",
+                Icon = "Attachments/364800c2-c094-46cb-add5-7dc3f416403d.png"
+            });
+            var subCategoryId = Guid.Parse("395849e7-033a-4ca0-8f7c-fc03d0eeadaa");
+            modelBuilder.Entity<SubCategory>().HasData(new SubCategory()
+            {
+                Id = subCategoryId ,
+                Name = "Facebook",
+                CategoriesId = categoryId,
+                Icon = "Attachments/364800c2-c094-46cb-add5-7dc3f416403d.png"
+
+            });
+
+            var serviceId = Guid.Parse("395849e7-033a-4ca0-8f7c-fc03d0eefdaa");
+
+            modelBuilder.Entity<Service>().HasData(new Service()
+            {
+             Id   = Guid.NewGuid(),
+             SubCategoryId = subCategoryId,
+             Icon = "Attachments/364800c2-c094-46cb-add5-7dc3f416403d.png",
+             ServiceId = "982",
+             Minimum = "50",
+             Maximum = "100000",
+             Name = "add  followers",
+             Description = "add followers",
+            });
             // new DbInitializer(modelBuilder).Seed();
+
         }
-
-
+        
 
         public virtual async Task<int> SaveChangesAsync(Guid? userId = null)
         {

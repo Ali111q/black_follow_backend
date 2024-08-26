@@ -14,7 +14,7 @@ namespace BackEndStructuer.Services;
 //
 public interface IOrderServices
 {
-    Task<(List<ServiceResponseConvertor>? order, string? error)> Create(OrderForm orderForm);
+    Task<(List<ServiceResponseConvertor>? order, string? error)> Create(OrderForm orderForm, Guid id);
     Task<(List<OrderDto> orders, int? totalCount, string? error)> GetAll(OrderFilter filter);
     Task<(Order? order, string? error)> Update(Guid id, OrderUpdate orderUpdate);
     Task<(Order? order, string? error)> Delete(Guid id);
@@ -42,7 +42,7 @@ public class OrderServices : IOrderServices
     }
 
 
-    public async Task<(List<ServiceResponseConvertor>? order, string? error)> Create(OrderForm orderForm)
+    public async Task<(List<ServiceResponseConvertor>? order, string? error)> Create(OrderForm form , Guid id)
     {
         var (order , error)  = await _trendfyiqService.GetService(new ServiceRequestConvertor());
         return (order, null);

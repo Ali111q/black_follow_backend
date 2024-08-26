@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BackEndStructuer.Controllers
 {
@@ -20,6 +21,7 @@ namespace BackEndStructuer.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<CategoriesDto>>> GetAll([FromQuery] CategoriesFilter filter)
         {
             var (categories, totalCount, error) = await _categoriesServices.GetAll(filter);
@@ -31,6 +33,8 @@ namespace BackEndStructuer.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+
         public async Task<ActionResult<Categories>> Create([FromBody] CategoriesForm categoriesForm)
         {
             var (category, error) = await _categoriesServices.Create(categoriesForm);

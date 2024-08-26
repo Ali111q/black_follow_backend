@@ -46,7 +46,7 @@ public class SubCategoryServices : ISubCategoryServices
             S => (filter.CategoriesId == null || S.CategoriesId == filter.CategoriesId) &&
                  (filter.Name == null || S.Name.Contains(filter.Name))
             ,
-            filter.PageNumber, filter.PageSize, filter.Deleted);
+            0, filter.PageSize, filter.Deleted);
         
         return (data.data, data.totalCount, null);
     }

@@ -34,24 +34,36 @@ public ServiceServices(
    
 public async Task<(Service? service, string? error)> Create(ServiceForm serviceForm )
 {
-    throw new NotImplementedException();
-      
+    var service = _mapper.Map<Service>(serviceForm);
+    var createdService = await _repositoryWrapper.Service.Add(service);
+    return (createdService, null);
 }
 
 public async Task<(List<ServiceDto> services, int? totalCount, string? error)> GetAll(ServiceFilter filter)
     {
-        throw new NotImplementedException();
+        var (data, count) = await _repositoryWrapper.Service.GetAll<ServiceDto>(
+            S=>filter.SubcategoryId == null || filter.SubcategoryId == S.SubCategoryId
+            ,0, filter.PageSize, filter.Deleted);
+        return (data, count, null);
     }
 
 public async Task<(Service? service, string? error)> Update(Guid id ,ServiceUpdate serviceUpdate)
-    {
-        throw new NotImplementedException();
+{
+    var service = await _repositoryWrapper.Service.Get(s => s.Id == id);    
+    if(service == null) return (null, "Service not found");
+    _mapper.Map(serviceUpdate, service);
+    var updatedService = await _repositoryWrapper.Service.Update(service);
+    return (updatedService, null);
+    
       
     }
 
 public async Task<(Service? service, string? error)> Delete(Guid id)
     {
-        throw new NotImplementedException();
+        var service = await _repositoryWrapper.Service.Get(s => s.Id == id);
+        if(service == null) return (null, "Service not found");
+        await _repositoryWrapper.Service.SoftDelete(id);
+        return (service, null);
    
     }
 

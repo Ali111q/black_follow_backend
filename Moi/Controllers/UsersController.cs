@@ -2,6 +2,7 @@ using GaragesStructure.DATA.DTOs.User;
 using GaragesStructure.Helpers;
 using GaragesStructure.Respository.Utils;
 using GaragesStructure.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GaragesStructure.Controllers;
@@ -42,4 +43,8 @@ public class UsersController : BaseController{
     public async Task<ActionResult> ChangeUserState([FromBody] bool isActive) =>
         Ok(await _userService.ChangeUserState(Id, isActive));
     
+    
+    [HttpGet("/api/Users/balance")]
+    [Authorize]
+    public async Task<ActionResult> GetBalance(Guid id) => Ok(await _userService.GetBalance(Id));
 }

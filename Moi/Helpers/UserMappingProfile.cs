@@ -41,6 +41,10 @@ namespace GaragesStructure.Helpers
 
 
             // here to add
+CreateMap<FinancialMovement, FinancialMovementDto>();
+CreateMap<FinancialMovementForm,FinancialMovement>();
+CreateMap<FinancialMovementUpdate,FinancialMovement>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+
 CreateMap<Order, OrderDto>();
 CreateMap<OrderForm,Order>();
 CreateMap<OrderUpdate,Order>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));

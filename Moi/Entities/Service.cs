@@ -8,9 +8,12 @@ namespace BackEndStructuer.Entities
         public string? Name { get; set; }
         public string? Minimum { get; set; }
         public string? Maximum { get; set; }
+        public string? Description { get; set; }
+        public string? ServiceId { get; set; }
         public decimal? ServicePrice { get; set; }
         public Guid SubCategoryId { get; set; }
         public SubCategory SubCategory { get; set; }
-        public List<Order> Orders { get; set; }
+        public List<Order> Orders { get; set; } = new List<Order>();
+
     }
 }
