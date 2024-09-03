@@ -34,6 +34,10 @@ public DbSet<FinancialMovement> FinancialMovements { get; set; }
 
 
         public DbSet<Notifications> Notifications { get; set; }
+        public DbSet<Person> Persons { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Patient> Patients { get; set; }
+        public DbSet<Audit<Guid>> Audits { get; set; }
 
         // public DbSet<DriverVehicle> DriverVehicles { get; set; }
 
@@ -49,6 +53,8 @@ public DbSet<FinancialMovement> FinancialMovements { get; set; }
                 .HasForeignKey(S => S.SubCategoryId);
             modelBuilder.Entity<Order>().HasOne<Service>(S => S.Service).WithMany(C => C.Orders)
                 .HasForeignKey(S => S.ServiceId);
+            modelBuilder.Entity<Order>().HasOne<AppUser>(S => S.AcceptedUser).WithMany(C => C.Orders)
+                .HasForeignKey(e => e.AcceptedUserId);
 
             modelBuilder.Entity<FinancialMovement>().HasOne<AppUser>(S => S.User).WithMany(C => C.FinancialMovements)
                 .HasForeignKey(S => S.UserId);
@@ -111,6 +117,8 @@ public DbSet<FinancialMovement> FinancialMovements { get; set; }
             });
             // new DbInitializer(modelBuilder).Seed();
 
+            modelBuilder.Entity<Doctor>().ToTable("Doctors");
+            modelBuilder.Entity<Patient>().ToTable("Patients");
         }
         
 

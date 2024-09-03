@@ -66,6 +66,8 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options => { options.OperationFilter<PascalCaseQueryParameterFilter>(); });
 builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddRazorPages()
+    .AddRazorRuntimeCompilation(); 
 builder.Services.AddApplicationServices(builder.Configuration);
 IConfiguration configuration = builder.Configuration;
 ConfigurationProvider.Configuration = configuration;
@@ -99,5 +101,7 @@ app.UseStaticFiles();
 app.UseMiddleware<UserStateMiddleware>();
 
 app.MapControllers();
+app.MapRazorPages();
+
 
 app.Run();

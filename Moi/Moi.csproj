@@ -27,6 +27,7 @@
         <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="6.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
@@ -35,6 +36,7 @@
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0" />
         <PackageReference Include="OneSignalApi" Version="2.0.2" />
+        <PackageReference Include="PDFsharp" Version="6.2.0-preview-1" />
         <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
         <PackageReference Include="TextExtensions" Version="1.0.0" />
@@ -43,10 +45,14 @@
     <ItemGroup>
         <Folder Include="DATA\Migrations\" />
         <Folder Include="Helpers\HangFire\" />
-        <Folder Include="View\" />
         <Folder Include="wwwroot\Attachments\" />
+        <Folder Include="wwwroot\chunks\" />
         <Folder Include="wwwroot\Logo\" />
         <Folder Include="wwwroot\MigrationsFile\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\uploads\4f3d31a1-4f0a-4702-bb87-d6381a7d59a7%2Fblack_follow.pdf" />
     </ItemGroup>
 
 

@@ -1,0 +1,103 @@
+@page
+@model IndexModel
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Upload</title>
+    <style>
+        /* Your existing styles */
+    </style>
+</head>
+
+<body>
+<div class="upload-container">
+    <h1>Upload Your PDF</h1>
+    <input type="file" id="fileInput" accept=".pdf" multiple />
+    <button onclick="uploadFiles()">Upload</button>
+    <div id="progressContainer" class="progress-container"></div>
+</div>
+
+<script>
+    async function uploadFiles() {
+        const files = document.getElementById('fileInput').files;
+        if (files.length === 0) {
+            alert('Please select at least one file.');
+            return;
+        }
+
+        const validExtensions = ['application/pdf'];
+        const chunkSize = 1024 * 1; // 1 MB chunk size
+        let totalProgress = 0;
+        let totalSize = 0;
+        const progressContainer = document.getElementById('progressContainer');
+
+        // Validate files and calculate total size
+        for (let i = 0; i < files.length; i++) {
+            if (!validExtensions.includes(files[i].type)) {
+                alert('Invalid file type. Please upload only PDF files.');
+                return;
+            }
+            totalSize += files[i].size;
+
+            // Create a progress bar for each file
+            const fileProgressBar = document.createElement('div');
+            fileProgressBar.classList.add('progress-bar');
+            fileProgressBar.innerHTML = `<div class="progress-bar-inner" id="progressBar${i}"></div>`;
+            progressContainer.appendChild(fileProgressBar);
+        }
+
+        const uploadChunk = async (file, currentChunk, totalChunks, fileIndex) => {
+            const start = currentChunk * chunkSize;
+            const end = Math.min(file.size, start + chunkSize);
+            const chunk = file.slice(start, end);
+
+            const formData = new FormData();
+            formData.append('chunk', chunk);
+            formData.append('chunkNumber', currentChunk);
+            formData.append('totalChunks', totalChunks);
+            formData.append('fileName', file.name);
+
+            return fetch('/api/File/upload-chunks', {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json()).then(data => {
+                if (currentChunk === totalChunks - 1 && fileIndex === files.length - 1) {
+                    // Send message to Flutter app
+                    window.opener.postMessage('closePage', '*');
+                    window.close();
+                }
+            }).catch(error => {
+                console.error('Upload error:', error);
+                throw error;
+            });
+        };
+
+        const uploadFile = async (file, fileIndex) => {
+            const totalChunks = Math.ceil(file.size / chunkSize);
+            for (let currentChunk = 0; currentChunk < totalChunks; currentChunk++) {
+                await uploadChunk(file, currentChunk, totalChunks, fileIndex);
+
+                totalProgress += Math.min(chunkSize, file.size - currentChunk * chunkSize);
+                const progress = (totalProgress / totalSize) * 100;
+                const progressBar = document.getElementById(`progressBar${fileIndex}`);
+                progressBar.style.width = `${progress}%`;
+            }
+        };
+
+        try {
+            for (let i = 0; i < files.length; i++) {
+                await uploadFile(files[i], i);
+            }
+        } catch (error) {
+            alert(error);
+        }
+    }
+</script>
+
+</body>
+
+</html>

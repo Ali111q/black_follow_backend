@@ -7,6 +7,7 @@ using GaragesStructure.Entities;
 using GaragesStructure.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using Newtonsoft.Json;
 
 
 namespace GaragesStructure.Repository{
@@ -52,6 +53,7 @@ namespace GaragesStructure.Repository{
             await _dbContext.Set<T>().AddAsync(entity);
             try {
                 await _dbContext.SaveChangesAsync(userId);
+                await SaveAudit(entity, "INSERT");
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.Message);
@@ -63,8 +65,13 @@ namespace GaragesStructure.Repository{
 
         public async Task<List<T>> AddRange(List<T> entities, Guid? userId = null) {
             await _dbContext.Set<T>().AddRangeAsync(entities);
-            try {
+            try
+            {
                 await _dbContext.SaveChangesAsync(userId);
+                foreach (var baseEntity in entities)
+                {
+                    await SaveAudit(baseEntity, "INSERT");
+                }
             }
             catch (Exception ex) {
                 Console.WriteLine(ex.Message);
@@ -78,9 +85,11 @@ namespace GaragesStructure.Repository{
 
         public async Task<T> Delete(TId id, Guid? userId = null) {
             var result = await GetById(id);
+            
             if (result == null) return null;
             _dbContext.Set<T>().Remove(result);
             await _dbContext.SaveChangesAsync(userId);
+            await SaveAudit(result, "DELETE");
             return result;
         }
 
@@ -91,6 +100,7 @@ namespace GaragesStructure.Repository{
 
             result.Deleted = true;
             _dbContext.Set<T>().Update(result);
+            await SaveAudit(result, "SOFT DELETE");
 
             try {
                 await _dbContext.SaveChangesAsync(userId);
@@ -104,9 +114,11 @@ namespace GaragesStructure.Repository{
         }
 
         public async Task<T> Update(T entity, Guid? userId = null) {
+            var oldValues = await _dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id.Equals(entity.Id));
             _dbContext.Set<T>().Update(entity);
             try {
                 await _dbContext.SaveChangesAsync(userId);
+                await SaveAudit(entity, "UPDATE",oldValues != null ? JsonConvert.SerializeObject(oldValues) : null);
             }
             catch (Exception e) {
                 Console.WriteLine(e.Message);
@@ -224,6 +236,23 @@ namespace GaragesStructure.Repository{
                         .Take(pageSize)
                         .ToListAsync()),
                 await query.CountAsync());
+        }
+        
+        private async Task SaveAudit(T entity, string action, string oldValues = null)
+        {
+            var audit = new Audit<Guid>
+            {
+                TableName = typeof(T).Name,
+                EntityId = (Guid)(object)entity.Id,
+                Action = action,
+                OldValues = oldValues,
+                NewValues = action == "DELETE" ? null : JsonConvert.SerializeObject(entity),
+                ChangedBy = "SYSTEM", // Replace with the actual user
+                ChangedAt = DateTime.UtcNow
+            };
+        
+            await _dbContext.Audits.AddAsync(audit);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

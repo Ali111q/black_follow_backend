@@ -22,7 +22,8 @@ namespace BackEndStructuer.Controllers
 
         
         [HttpGet]
-        public async Task<ActionResult<List<FinancialMovementDto>>> GetAll([FromQuery] FinancialMovementFilter filter) => Ok(await _financialmovementServices.GetAll(filter) , filter.PageNumber , filter.PageSize);
+        [Authorize]
+        public async Task<ActionResult<List<FinancialMovementDto>>> GetAll([FromQuery] FinancialMovementFilter filter) => Ok(await _financialmovementServices.GetAll(filter, Id) , filter.PageNumber , filter.PageSize);
 
         
         [HttpPost]

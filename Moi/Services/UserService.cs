@@ -1,6 +1,7 @@
 using AutoMapper;
 using GaragesStructure.DATA.DTOs;
 using e_parliament.Interface;
+using GaragesStructure.DATA;
 using GaragesStructure.DATA.DTOs.User;
 using GaragesStructure.Entities;
 using GaragesStructure.Repository;
@@ -28,19 +29,34 @@ namespace GaragesStructure.Services{
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
+        private readonly DataContext _context;
 
         public UserService(
             IRepositoryWrapper repositoryWrapper, 
             IMapper mapper,
-            ITokenService tokenService 
+            ITokenService tokenService ,
+            DataContext context
             ) {
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
             _tokenService = tokenService;
+            _context = context;
         }
 
         public async Task<(UserDto? user, string? error)> Login(LoginForm loginForm) {
+            
+            // var doctor =  _context.Patients.Add(new Patient()
+            // {
+            //    Name = ";lsdkdksfjsdl",
+            //   Disease  = "ldkfs"
+            // });
+            // await _context.SaveChangesAsync();
+var data =  _context.Persons.ToList();
+
+var newData =data.OfType<Patient>().ToList();
             var user = await _repositoryWrapper.User.Get(u => u.Username == loginForm.Username, i => i.Include(x => x.Role));
+            
+            
             if (user == null) return (null, "User not found");
             if (user.IsActive == false) return (null, "User is not active");
             if (!BCrypt.Net.BCrypt.Verify(loginForm.Password, user.Password)) return (null, "Wrong password");

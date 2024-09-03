@@ -3,6 +3,7 @@ using System;
 using GaragesStructure.DATA;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GaragesStructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240827161110_OrderNumberToOrder")]
+    partial class OrderNumberToOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace GaragesStructure.Migrations
                         new
                         {
                             Id = new Guid("395849e7-033a-4ca0-8f7c-fc03d0eecdaa"),
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 268, DateTimeKind.Utc).AddTicks(5500),
+                            CreationDate = new DateTime(2024, 8, 27, 16, 11, 10, 425, DateTimeKind.Utc).AddTicks(7630),
                             Deleted = false,
                             Icon = "Attachments/364800c2-c094-46cb-add5-7dc3f416403d.png",
                             Name = "Facebook"
@@ -86,9 +89,6 @@ namespace GaragesStructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("AcceptedUserId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Count")
                         .HasColumnType("integer");
 
@@ -121,8 +121,6 @@ namespace GaragesStructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AcceptedUserId");
 
                     b.HasIndex("FinancialMovementId");
 
@@ -178,8 +176,8 @@ namespace GaragesStructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fd050388-859c-484b-a474-da42273b152b"),
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 268, DateTimeKind.Utc).AddTicks(5590),
+                            Id = new Guid("57c0dc20-d93b-49a4-bad2-e38bdeb68b02"),
+                            CreationDate = new DateTime(2024, 8, 27, 16, 11, 10, 425, DateTimeKind.Utc).AddTicks(7680),
                             Deleted = false,
                             Description = "add followers",
                             Icon = "Attachments/364800c2-c094-46cb-add5-7dc3f416403d.png",
@@ -223,7 +221,7 @@ namespace GaragesStructure.Migrations
                         {
                             Id = new Guid("395849e7-033a-4ca0-8f7c-fc03d0eeadaa"),
                             CategoriesId = new Guid("395849e7-033a-4ca0-8f7c-fc03d0eecdaa"),
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 268, DateTimeKind.Utc).AddTicks(5550),
+                            CreationDate = new DateTime(2024, 8, 27, 16, 11, 10, 425, DateTimeKind.Utc).AddTicks(7650),
                             Deleted = false,
                             Icon = "Attachments/364800c2-c094-46cb-add5-7dc3f416403d.png",
                             Name = "Facebook"
@@ -289,47 +287,15 @@ namespace GaragesStructure.Migrations
                             Id = new Guid("395849e7-033a-4ca0-8f7c-fc03d0eeedaa"),
                             Account = 0,
                             Balance = 0m,
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 134, DateTimeKind.Utc).AddTicks(3080),
+                            CreationDate = new DateTime(2024, 8, 27, 16, 11, 10, 293, DateTimeKind.Utc).AddTicks(9000),
                             Deleted = false,
                             Email = "bbbeat114@gmail.com",
                             FullName = "ali",
                             IsActive = true,
-                            Password = "$2a$10$0uH.g5mXaIHiwnKrnOLbH.bSojYoE2L3SHY7xLfXxvPit.VAqZi7m",
+                            Password = "$2a$10$Ch.g.oVnmHTjt.3eH1sNdOjaIn6E8wF.vemURueimeUBPdUv/kKve",
                             RoleId = new Guid("395849e7-033a-4ca0-8f7c-fc03d0943daa"),
                             Username = "ali"
                         });
-                });
-
-            modelBuilder.Entity("GaragesStructure.Entities.Audit<System.Guid>", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Action")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("ChangedAt")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("ChangedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("EntityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("NewValues")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OldValues")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TableName")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Audits");
                 });
 
             modelBuilder.Entity("GaragesStructure.Entities.Country", b =>
@@ -447,29 +413,6 @@ namespace GaragesStructure.Migrations
                     b.ToTable("Permissions");
                 });
 
-            modelBuilder.Entity("GaragesStructure.Entities.Person", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreationDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool?>("Deleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Persons");
-
-                    b.UseTptMappingStrategy();
-                });
-
             modelBuilder.Entity("GaragesStructure.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -494,14 +437,14 @@ namespace GaragesStructure.Migrations
                         new
                         {
                             Id = new Guid("395849e7-033a-4ca0-8f7c-fc03d0943daa"),
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 134, DateTimeKind.Utc).AddTicks(3020),
+                            CreationDate = new DateTime(2024, 8, 27, 16, 11, 10, 293, DateTimeKind.Utc).AddTicks(8960),
                             Deleted = false,
                             Name = "User"
                         },
                         new
                         {
                             Id = new Guid("395849e7-033a-4ca0-8f7c-fc03d0943dab"),
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 134, DateTimeKind.Utc).AddTicks(3030),
+                            CreationDate = new DateTime(2024, 8, 27, 16, 11, 10, 293, DateTimeKind.Utc).AddTicks(8970),
                             Deleted = false,
                             Name = "Admin"
                         });
@@ -531,28 +474,6 @@ namespace GaragesStructure.Migrations
                     b.ToTable("RolePermissions");
                 });
 
-            modelBuilder.Entity("GaragesStructure.Entities.Doctor", b =>
-                {
-                    b.HasBaseType("GaragesStructure.Entities.Person");
-
-                    b.Property<string>("Speciality")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.ToTable("Doctors", (string)null);
-                });
-
-            modelBuilder.Entity("GaragesStructure.Entities.Patient", b =>
-                {
-                    b.HasBaseType("GaragesStructure.Entities.Person");
-
-                    b.Property<string>("Disease")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.ToTable("Patients", (string)null);
-                });
-
             modelBuilder.Entity("BackEndStructuer.Entities.FinancialMovement", b =>
                 {
                     b.HasOne("GaragesStructure.Entities.AppUser", "User")
@@ -566,12 +487,6 @@ namespace GaragesStructure.Migrations
 
             modelBuilder.Entity("BackEndStructuer.Entities.Order", b =>
                 {
-                    b.HasOne("GaragesStructure.Entities.AppUser", "AcceptedUser")
-                        .WithMany("Orders")
-                        .HasForeignKey("AcceptedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BackEndStructuer.Entities.FinancialMovement", "FinancialMovement")
                         .WithMany()
                         .HasForeignKey("FinancialMovementId")
@@ -585,12 +500,10 @@ namespace GaragesStructure.Migrations
                         .IsRequired();
 
                     b.HasOne("GaragesStructure.Entities.AppUser", "User")
-                        .WithMany("AcceptedOrders")
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AcceptedUser");
 
                     b.Navigation("FinancialMovement");
 
@@ -662,24 +575,6 @@ namespace GaragesStructure.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("GaragesStructure.Entities.Doctor", b =>
-                {
-                    b.HasOne("GaragesStructure.Entities.Person", null)
-                        .WithOne()
-                        .HasForeignKey("GaragesStructure.Entities.Doctor", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("GaragesStructure.Entities.Patient", b =>
-                {
-                    b.HasOne("GaragesStructure.Entities.Person", null)
-                        .WithOne()
-                        .HasForeignKey("GaragesStructure.Entities.Patient", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("BackEndStructuer.Entities.Categories", b =>
                 {
                     b.Navigation("SubCategories");
@@ -697,8 +592,6 @@ namespace GaragesStructure.Migrations
 
             modelBuilder.Entity("GaragesStructure.Entities.AppUser", b =>
                 {
-                    b.Navigation("AcceptedOrders");
-
                     b.Navigation("FinancialMovements");
 
                     b.Navigation("Orders");

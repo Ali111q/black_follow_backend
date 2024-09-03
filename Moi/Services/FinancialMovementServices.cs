@@ -12,7 +12,7 @@ namespace BackEndStructuer.Services;
 public interface IFinancialMovementServices
 {
 Task<(FinancialMovement? financialmovement, string? error)> Create(FinancialMovementForm financialmovementForm );
-Task<(List<FinancialMovementDto> financialmovements, int? totalCount, string? error)> GetAll(FinancialMovementFilter filter);
+Task<(List<FinancialMovementDto> financialmovements, int? totalCount, string? error)> GetAll(FinancialMovementFilter filter, Guid id);
 Task<(FinancialMovement? financialmovement, string? error)> Update(Guid id , FinancialMovementUpdate financialmovementUpdate);
 Task<(FinancialMovement? financialmovement, string? error)> Delete(Guid id);
 }
@@ -38,7 +38,7 @@ public async Task<(FinancialMovement? financialmovement, string? error)> Create(
       
 }
 
-public async Task<(List<FinancialMovementDto> financialmovements, int? totalCount, string? error)> GetAll(FinancialMovementFilter filter)
+public async Task<(List<FinancialMovementDto> financialmovements, int? totalCount, string? error)> GetAll(FinancialMovementFilter filter,Guid id)
 {
     var (data, count) = await _repositoryWrapper.FinancialMovement.GetAll<FinancialMovementDto>(filter.PageNumber, filter.PageSize, filter.Deleted);
 

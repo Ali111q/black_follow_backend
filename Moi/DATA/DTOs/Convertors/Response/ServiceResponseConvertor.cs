@@ -8,7 +8,7 @@ public class ServiceResponseConvertor
     public decimal Rate { get; set; }
     public int Min { get; set; }
     public int Max { get; set; }
-    public bool DripFeed { get; set; }
+    public bool DripFeed { get; set; }  
     public bool Refill { get; set; }
     public bool Cancel { get; set; }
     public string Category { get; set; }

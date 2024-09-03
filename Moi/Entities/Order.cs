@@ -12,9 +12,13 @@ namespace BackEndStructuer.Entities
         public DateTime Date { get; set; }  
         public Guid UserId { get; set; }
         public AppUser User { get; set; }
+        public Guid AcceptedUserId { get; set; }
+        public AppUser AcceptedUser { get; set; }
         public Guid ServiceId { get; set; }
         public Service Service { get; set; }
         public FinancialMovement FinancialMovement { get; set; }
         public Guid FinancialMovementId { get; set; }
+        
+        public int orderNumber { get; set; }
     }
 }
