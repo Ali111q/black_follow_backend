@@ -3,7 +3,7 @@ name: Deploy ASP.NET App to VPS
 on:
   push:
     branches:
-      - deploy  # or the branch you want to trigger the deploy
+      - main  # or the branch you want to trigger the deploy
 
 jobs:
   build:
@@ -39,3 +39,10 @@ jobs:
     - name: Restart the ASP.NET app on VPS
       run: |
         ssh user@your_vps_ip 'sudo systemctl restart kestrel-aspnetapp.service'
+
+    # Telegram Notification Step
+    - name: Notify via Telegram
+      run: |
+        curl -s -X POST https://api.telegram.org/bot6924975011:AAG2uOkV4Ah_4Zxqtccu9k6kRdFaULptHp8/sendMessage \
+        -d chat_id=822950561 \
+        -d text="Deployment Successful for ASP.NET App on VPS"
