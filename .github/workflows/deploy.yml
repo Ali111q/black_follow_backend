@@ -1,0 +1,41 @@
+name: Deploy ASP.NET App to VPS
+
+on:
+  push:
+    branches:
+      - deploy  # or the branch you want to trigger the deploy
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.x' # or the version you're using
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build the project
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Publish the app
+      run: dotnet publish -c Release -o ./publish
+
+    - name: Setup SSH for deployment
+      uses: webfactory/ssh-agent@v0.7.1
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Copy files to VPS
+      run: |
+        scp -r ./publish user@your_vps_ip:/var/www/aspnetapp
+
+    - name: Restart the ASP.NET app on VPS
+      run: |
+        ssh user@your_vps_ip 'sudo systemctl restart kestrel-aspnetapp.service'

@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using BackEndStructuer.Entities;
 using GaragesStructure.Entities;
 using GaragesStructure.Respository.Utils;
 
@@ -12,8 +14,7 @@ namespace BackEndStructuer.Entities
         public DateTime Date { get; set; }  
         public Guid UserId { get; set; }
         public AppUser User { get; set; }
-        public Guid AcceptedUserId { get; set; }
-        public AppUser AcceptedUser { get; set; }
+      
         public Guid ServiceId { get; set; }
         public Service Service { get; set; }
         public FinancialMovement FinancialMovement { get; set; }
@@ -21,4 +22,13 @@ namespace BackEndStructuer.Entities
         
         public int orderNumber { get; set; }
     }
+}
+
+
+public enum OsamahIsBitch
+{
+    [Description(typeof())]
+    OSAMAH,
+    IS,
+    BETCH
 }
