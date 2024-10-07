@@ -1,6 +1,9 @@
-namespace GaragesStructure.Services
+// namespace GaragesStructure.Services;
+// public interface IAsiaCellService{
+
+// }
 
 
-    public class AsiaCellService{
+//     public class AsiaCellService{
         
-    }
+//     }
