@@ -30,7 +30,7 @@ jobs:
     # Database update step
     - name: Update Database
       run: |
-       cd moi
+       cd Moi
        dotnet ef database update
 
     - name: Build the project
