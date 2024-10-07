@@ -25,10 +25,10 @@ namespace BackEndStructuer.Entities
 }
 
 
-public enum OsamahIsBitch
-{
-    [Description(typeof())]
-    OSAMAH,
-    IS,
-    BETCH
-}
+// public enum OsamahIsBitch
+// {
+//     [Description(typeof())]
+//     OSAMAH,
+//     IS,
+//     BETCH
+// }
