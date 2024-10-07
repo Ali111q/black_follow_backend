@@ -49,8 +49,8 @@ jobs:
 
     - name: Add VPS to known_hosts
       run: |
-      mkdir -p ~/.ssh
-      echo "92.113.27.202 $(ssh-keyscan -t rsa 92.113.27.202)" >> ~/.ssh/known_hosts
+        mkdir -p ~/.ssh
+        echo "92.113.27.202 $(ssh-keyscan -t rsa 92.113.27.202)" >> ~/.ssh/known_hosts
 
 
     - name: Copy files to VPS
