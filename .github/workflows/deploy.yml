@@ -49,11 +49,11 @@ jobs:
 
     - name: Copy files to VPS
       run: |
-        scp -r ./publish user@your_vps_ip:/var/www/aspnetapp
+        scp -r ./publish root@92.113.27.202:/var/www/aspnetapp
 
     - name: Restart the ASP.NET app on VPS
       run: |
-        ssh user@your_vps_ip 'sudo systemctl restart kestrel-aspnetapp.service'
+        ssh root@92.113.27.202 'sudo systemctl restart kestrel-aspnetapp.service'
 
     # Telegram Notification Step
     - name: Notify via Telegram
