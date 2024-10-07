@@ -3,78 +3,67 @@ on:
   push:
     branches:
       - "main"
+
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       systemctl_service_name: Backend
-      app_port: 5051
       message: |
-        [${{ github.event.head_commit.committer.name }}](https://github.com/${{github.event.head_commit.committer.username}}) pushed new commit:
-        `[ ${{github.event.head_commit.message}} ]`
-        to [${{ github.event.repository.name }}](https://github.com/${{ github.event.repository.html_url }})
+        [${{ github.event.head_commit.committer.name }}](https://github.com/${{github.event.head_commit.committer.username}}) pushed new commit: 
+        `[ ${{github.event.head_commit.message}} ]` 
+        to [${{ github.event.repository.name }}](https://github.com/${{github.event.repository.html_url}})
     steps:
-      # Checkout code
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v2.1.0
+        with:
+          dotnet-version: "8.0.x"
+          include-prerelease: false
 
-      # Build .NET project
-      - name: Build .NET project
-        run: dotnet publish -c Release -o deploy/
+      - name: Build
+        run: dotnet build -c Release
 
-      # Debug: List deploy directory contents
-      - name: List deploy directory contents
-        run: ls -la deploy/
+      - name: Publish
+        run: dotnet publish -c Release -o deploy
 
-      # Stop .NET services
-      - name: Stop .NET services
+      - name: stop dotnet services
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: sudo systemctl stop ${{ env.systemctl_service_name }}
           host: ${{ secrets.SSH_HOST }}
-          port: ${{ secrets.SSH_PORT }}
+          port: 22
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
 
-      # Modify service file to include the port
-      - name: Modify service file to include the port
-        uses: garygrossgarten/github-action-ssh@release
-        with:
-          command: |
-            sudo sed -i 's|Environment=.*|Environment=ASPNETCORE_URLS=http://0.0.0.0:${{ env.app_port }}|' /etc/systemd/system/${{ env.systemctl_service_name }}.service
-            sudo systemctl daemon-reload
-          host: ${{ secrets.SSH_HOST }}
-          port: ${{ secrets.SSH_PORT }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-
-      # Copy via SSH
-      - name: Copy via SSH
+      - name: copy via ssh
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
-          port: ${{ secrets.SSH_PORT }}
+          port: 22
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           source: deploy/*
           target: "/var/www/backend"
           overwrite: true
+          rm: false
+          debug: true # Enable debugging
 
-      # Start .NET services
-      - name: Start .NET services
+      - name: start dotnet services
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: sudo systemctl start --no-block ${{ env.systemctl_service_name }}
           host: ${{ secrets.SSH_HOST }}
-          port: ${{ secrets.SSH_PORT }}
+          port: 22
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
 
-      # Send notification to Telegram
-      - name: Send notification to Telegram
+      - name: send notification to telegram
         uses: appleboy/telegram-action@master
         with:
+          # to: -1002235899879
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: ${{ env.message }}
           format: markdown
+          disable_web_page_preview: true
