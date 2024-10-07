@@ -21,11 +21,24 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
+    - name: Install EF Core CLI
+      run: dotnet tool install --global dotnet-ef
+
+    - name: Add EF Core CLI to PATH
+      run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
     - name: Build the project
       run: dotnet build --configuration Release --no-restore
 
     - name: Publish the app
       run: dotnet publish -c Release -o ./publish
+
+    # Database update step
+    - name: Update Database
+      env:
+        # Add your database connection string as a GitHub secret
+        ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
+      run: dotnet ef database update
 
     - name: Setup SSH for deployment
       uses: webfactory/ssh-agent@v0.5.3  # Use the correct version
