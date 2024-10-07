@@ -47,6 +47,12 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+    - name: Add VPS to known_hosts
+      run: |
+      mkdir -p ~/.ssh
+      echo "92.113.27.202 $(ssh-keyscan -t rsa 92.113.27.202)" >> ~/.ssh/known_hosts
+
+
     - name: Copy files to VPS
       run: |
         scp -r ./publish root@92.113.27.202:/var/www/aspnetapp
