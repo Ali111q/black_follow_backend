@@ -1,23 +1,29 @@
 name: Backend Deploy
+
 on:
   push:
     branches:
       - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
+
       - name: Build Docker Image
         run: docker build . -t alihazem1/black_follow:latest
+
       - name: Log into Docker Hub
         uses: docker/login-action@v2
         with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push the images to Docker Hub
         run: docker push alihazem1/black_follow
+
       - name: Pull the image to VM
         uses: appleboy/ssh-action@v1.0.0
         with:
