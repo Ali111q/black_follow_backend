@@ -21,14 +21,27 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
+    - name: Install EF Core CLI
+      run: dotnet tool install --global dotnet-ef
+
+    - name: Add EF Core CLI to PATH
+      run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
     - name: Build the project
       run: dotnet build --configuration Release --no-restore
 
     - name: Publish the app
       run: dotnet publish -c Release -o ./publish
 
+    # Database update step
+    - name: Update Database
+      env:
+        # Add your database connection string as a GitHub secret
+        ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
+      run: dotnet ef database update
+
     - name: Setup SSH for deployment
-      uses: webfactory/ssh-agent@v0.7.1
+      uses: webfactory/ssh-agent@v0.5.3  # Use the correct version
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
@@ -43,6 +56,6 @@ jobs:
     # Telegram Notification Step
     - name: Notify via Telegram
       run: |
-        curl -s -X POST https://api.telegram.org/bot6924975011:AAG2uOkV4Ah_4Zxqtccu9k6kRdFaULptHp8/sendMessage \
-        -d chat_id=822950561 \
+        curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+        -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
         -d text="Deployment Successful for ASP.NET App on VPS"
