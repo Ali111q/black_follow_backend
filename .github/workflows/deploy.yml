@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       systemctl_service_name: Backend # Adjust this to your service name
-      project_name: blaclfollow # Replace with your actual project name
+      project_name: Moi # Replace with your actual project name
       project_port: 5051 # Specify the port your application runs on
       message: |
         [${{ github.event.head_commit.committer.name }}](https://github.com/${{github.event.head_commit.committer.username}}) pushed new commit: 
@@ -43,7 +43,7 @@ jobs:
 
           [Service]
           Type=exec
-          ExecStart=/usr/bin/dotnet /var/www/backend/${{ env.project_name }}.dll --urls http://0.0.0.0:${{ env.project_port }}
+          ExecStart=/usr/bin/dotnet /var/www/backend/deploy/${{ env.project_name }}.dll --urls http://0.0.0.0:${{ env.project_port }}
           Restart=always
           User=www-data
           Environment=ASPNETCORE_ENVIRONMENT=Production
