@@ -1,42 +1,15 @@
-name: Deploy Bilad System Backend Service
-on:
-  push:
-    branches:
-      - "main"
-
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       systemctl_service_name: Backend
+      app_port: 5051 # You can modify this port dynamically
       message: |
-        [${{ github.event.head_commit.committer.name }}](https://github.com/${{github.event.head_commit.committer.username}}) pushed new commit: 
-        `[ ${{github.event.head_commit.message}} ]` 
-        to [${{ github.event.repository.name }}](https://github.com/${{ github.event.repository.html_url }}) 
-    steps: 
-      - uses: actions/checkout@v2
-      
-      - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v2.1.0
-        with:
-          dotnet-version: "8.0.x"
-          include-prerelease: false
-
-      - name: Build
-        run: dotnet build -c Release
-
-      - name: Publish
-        run: dotnet publish -c Release -o deploy
-
-      - name: Add server to known hosts
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
-      - name: Set up SSH key
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+        [${{ github.event.head_commit.committer.name }}](https://github.com/${{github.event.head_commit.committer.username}}) pushed new commit:
+        `[ ${{github.event.head_commit.message}} ]`
+        to [${{ github.event.repository.name }}](https://github.com/${{ github.event.repository.html_url }})
+    steps:
+      # Previous steps ...
 
       - name: Stop .NET services
         uses: garygrossgarten/github-action-ssh@release
@@ -45,7 +18,18 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }} # Use if not using key authentication
+          password: ${{ secrets.SSH_PASSWORD }}
+
+      - name: Modify service file to include the port
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: |
+            sudo sed -i 's|Environment=.*|Environment=ASPNETCORE_URLS=http://0.0.0.0:${{ env.app_port }}|' /etc/systemd/system/${{ env.systemctl_service_name }}.service
+            sudo systemctl daemon-reload
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
 
       - name: Copy via SSH
         uses: appleboy/scp-action@master
@@ -53,12 +37,10 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }} # Use if not using key authentication
+          password: ${{ secrets.SSH_PASSWORD }}
           source: deploy/*
           target: "/var/www/backend"
           overwrite: true
-          rm: false
-          debug: true # Enable debugging
 
       - name: Start .NET services
         uses: garygrossgarten/github-action-ssh@release
@@ -67,7 +49,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }} # Use if not using key authentication
+          password: ${{ secrets.SSH_PASSWORD }}
 
       - name: Send notification to Telegram
         uses: appleboy/telegram-action@master
@@ -76,4 +58,3 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: ${{ env.message }}
           format: markdown
-          disable_web_page_preview: true
