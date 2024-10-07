@@ -1,4 +1,5 @@
 name: Deploy Bilad System Backend Service
+
 on:
   push:
     branches:
@@ -8,18 +9,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      systemctl_service_name: Backend
+      systemctl_service_name: Backend # Adjust this to your service name
+      project_name: blaclfollow # Replace with your actual project name
+      project_port: 5051 # Specify the port your application runs on
       message: |
         [${{ github.event.head_commit.committer.name }}](https://github.com/${{github.event.head_commit.committer.username}}) pushed new commit: 
         `[ ${{github.event.head_commit.message}} ]` 
         to [${{ github.event.repository.name }}](https://github.com/${{github.event.repository.html_url}})
+
     steps:
       - uses: actions/checkout@v2
+
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v2.1.0
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "8.0.x" # Adjust to your .NET version
           include-prerelease: false
+
+      - name: Restore dependencies
+        run: dotnet restore
 
       - name: Build
         run: dotnet build -c Release
@@ -27,7 +35,30 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o deploy
 
-      - name: stop dotnet services
+      - name: Create systemd service file
+        run: |
+          echo "[Unit]
+          Description=${{ env.project_name }} service
+          After=network.target
+
+          [Service]
+          Type=exec
+          ExecStart=/usr/bin/dotnet /var/www/backend/${{ env.project_name }}.dll --urls http://0.0.0.0:${{ env.project_port }}
+          Restart=always
+          User=www-data
+          Environment=ASPNETCORE_ENVIRONMENT=Production
+          WorkingDirectory=/var/www/backend
+          RestartSec=10
+          SyslogIdentifier=${{ env.systemctl_service_name }}
+
+          [Install]
+          WantedBy=multi-user.target" | sudo tee /etc/systemd/system/${{ env.systemctl_service_name }}.service
+
+      - name: Reload systemd
+        run: |
+          sudo systemctl daemon-reload
+
+      - name: Stop dotnet services
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: sudo systemctl stop ${{ env.systemctl_service_name }}
@@ -36,7 +67,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
 
-      - name: copy via ssh
+      - name: Copy via SSH
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -44,12 +75,12 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           source: deploy/*
-          target: "/var/www/backend"
+          target: "/var/www/backend" # Adjust target path as needed
           overwrite: true
           rm: false
           debug: true # Enable debugging
 
-      - name: start dotnet services
+      - name: Start dotnet services
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: sudo systemctl start --no-block ${{ env.systemctl_service_name }}
@@ -58,10 +89,9 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
 
-      - name: send notification to telegram
+      - name: Send notification to Telegram
         uses: appleboy/telegram-action@master
         with:
-          # to: -1002235899879
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: ${{ env.message }}
