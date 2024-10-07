@@ -31,8 +31,9 @@ jobs:
     - name: Update Database
       env:
         # Add your database connection string as a GitHub secret
-        ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
-      run: dotnet ef database update
+      run: |
+       cd moi
+       dotnet ef database update
 
     - name: Build the project
       run: dotnet build --configuration Release --no-restore
