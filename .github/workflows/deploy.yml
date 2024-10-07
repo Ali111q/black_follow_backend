@@ -29,8 +29,6 @@ jobs:
     
     # Database update step
     - name: Update Database
-      env:
-        # Add your database connection string as a GitHub secret
       run: |
        cd moi
        dotnet ef database update
