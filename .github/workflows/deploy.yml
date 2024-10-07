@@ -1,69 +1,70 @@
-name: Deploy ASP.NET App to VPS
-
+name: Deploy Bilad System Backend Service
 on:
   push:
     branches:
-      - main  # or the branch you want to trigger the deploy
+      - "main"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
+        env:
+            systemctl_service_name: Backend
+            message: |
+              [${{ github.event.head_commit.committer.name }}](https://github.com/${{github.event.head_commit.committer.username}}) pushed new commit: 
+              `[ ${{github.event.head_commit.message}} ]` 
+              to [${{ github.event.repository.name }}](https://github.com/${{github.event.repository.html_url}}) 
+        steps: 
+          - uses: actions/checkout@v2
+          - name: Setup .NET Core SDK
+            uses: actions/setup-dotnet@v2.1.0
+            with:
+              dotnet-version: "8.0.x"
+              include-prerelease: false
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+          - name: Build
+            run: dotnet build -c Release
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.x' # or the version you're using hello
+          - name: Publish
+            run: dotnet publish -c Release -o deploy
 
-    - name: Restore dependencies
-      run: dotnet restore
+          - name: stop dotnet services
+            uses: garygrossgarten/github-action-ssh@release
+            with:
+                command: sudo systemctl stop ${{ env.systemctl_service_name }}
+                host: ${{ secrets.SSH_HOST }}
+                port: 22
+                username: ${{ secrets.SSH_USERNAME }}
+                password: ${{ secrets.SSH_PASSWORD }}
+            
+          - name: copy via ssh
+            uses: appleboy/scp-action@master
+            with:
+              host: ${{ secrets.SSH_HOST }}
+              port: 22
+              username: ${{ secrets.SSH_USERNAME }}
+              password: ${{ secrets.SSH_PASSWORD }}
+              source: deploy/*
+              target: "/var/www/backend"
+              overwrite: true
+              rm: false
+              debug: true # Enable debugging
+            
+          - name: start dotnet services
+            uses: garygrossgarten/github-action-ssh@release
+            with:
+              command: sudo systemctl start --no-block ${{ env.systemctl_service_name }}
+              host: ${{ secrets.SSH_HOST }}
+              port: 22
+              username: ${{ secrets.SSH_USERNAME }}
+              password: ${{ secrets.SSH_PASSWORD }}
 
-    - name: Install EF Core CLI
-      run: dotnet tool install --global dotnet-ef
-
-    - name: Add EF Core CLI to PATH
-      run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
-    
-    # Database update step
-    # - name: Update Database
-    #   run: |
-    #    cd Moi
-    #    dotnet ef database update
-
-    - name: Build the project
-      run: |
-        cd Moi
-        dotnet build --configuration Release --no-restore
-
-    - name: Publish the app
-      run: dotnet publish -c Release -o ./publish
-
-
-    - name: Setup SSH for deployment
-      uses: webfactory/ssh-agent@v0.5.3  # Use the correct version
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-    - name: Add VPS to known_hosts
-      run: |
-        mkdir -p ~/.ssh
-        echo "92.113.27.202 $(ssh-keyscan -t rsa 92.113.27.202)" >> ~/.ssh/known_hosts
-
-
-    - name: Copy files to VPS
-      run: |
-        scp -r ./publish root@92.113.27.202:/var/www/aspnetapp
-
-    - name: Restart the ASP.NET app on VPS
-      run: |
-        ssh root@92.113.27.202 'sudo systemctl restart kestrel-aspnetapp.service'
-
-    # Telegram Notification Step
-    - name: Notify via Telegram
-      run: |
-        curl -s -X POST https://api.telegram.org/bot6924975011:AAG2uOkV4Ah_4Zxqtccu9k6kRdFaULptHp8/sendMessage \
-        -d chat_id=822950561 \
-        -d text="Deployment Successful for ASP.NET App on VPS"
+        
+          - name: send notification to telegram
+            uses: appleboy/telegram-action@master
+            with:
+                # to: -1002235899879
+                to: ${{ secrets.TELEGRAM_CHAT_ID }}
+                token: ${{ secrets.TELEGRAM_TOKEN }}
+                message: ${{ env.message }}
+                format: markdown
+                disable_web_page_preview: true
