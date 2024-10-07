@@ -28,13 +28,15 @@ jobs:
       run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
     
     # Database update step
-    - name: Update Database
-      run: |
-       cd Moi
-       dotnet ef database update
+    # - name: Update Database
+    #   run: |
+    #    cd Moi
+    #    dotnet ef database update
 
     - name: Build the project
-      run: dotnet build --configuration Release --no-restore
+      run: |
+        cd Moi
+        dotnet build --configuration Release --no-restore
 
     - name: Publish the app
       run: dotnet publish -c Release -o ./publish
