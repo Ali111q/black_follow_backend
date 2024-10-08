@@ -17,8 +17,8 @@ RUN apt-get update && apt-get install -y postgresql-16 postgresql-client-16
 # Configure PostgreSQL
 USER postgres
 RUN /etc/init.d/postgresql start && \
-    psql --command "CREATE USER postgres WITH SUPERUSER PASSWORD '10109989';" && \
-    createdb blackfollow
+    psql --command "ALTER USER postgres WITH PASSWORD '10109989';" && \
+    psql --command "CREATE DATABASE blackfollow;"
 
 # Expose PostgreSQL port
 EXPOSE 5432
