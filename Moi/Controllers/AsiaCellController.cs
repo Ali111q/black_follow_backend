@@ -1,6 +1,6 @@
-namespace GaragesStructure.Controllers{
+// namespace GaragesStructure.Controllers{
 
-public class AsiacellController: Proparties.BaseController{
-    
-}
-}
+// public class AsiacellController: Proparties.BaseController{
+
+// }
+// }
