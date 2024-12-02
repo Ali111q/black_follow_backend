@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  black_follow:
+    container_name: black_follow_api
+    build: 
+      context: .
+      dockerfile: Moi/Dockerfile
+    ports:
+        - "5002:5002"
+        - "5001:5001"
+  database:
+    image: postgres:latest
+    container_name: black_follow_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 10109989
+      POSTGRES_DB: hello
+    volumes:
+      - ./.containers/postgres-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+      

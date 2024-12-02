@@ -53,8 +53,7 @@ public DbSet<FinancialMovement> FinancialMovements { get; set; }
                 .HasForeignKey(S => S.SubCategoryId);
             modelBuilder.Entity<Order>().HasOne<Service>(S => S.Service).WithMany(C => C.Orders)
                 .HasForeignKey(S => S.ServiceId);
-            modelBuilder.Entity<Order>().HasOne<AppUser>(S => S.AcceptedUser).WithMany(C => C.Orders)
-                .HasForeignKey(e => e.AcceptedUserId);
+           
 
             modelBuilder.Entity<FinancialMovement>().HasOne<AppUser>(S => S.User).WithMany(C => C.FinancialMovements)
                 .HasForeignKey(S => S.UserId);

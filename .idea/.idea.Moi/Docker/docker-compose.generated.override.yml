@@ -1,0 +1,23 @@
+# This is a generated file. Not intended for manual editing.
+version: "3.4"
+services:
+  black_follow:
+    build:
+      context: "/Users/logic/Documents/GitHub/black_follow_backend"
+      dockerfile: "Moi/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/Moi.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net8.0/Moi.staticwebassets.runtime.CT.json"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "moi:dev"
+    ports: []
+    volumes:
+    - "/Users/logic/.nuget/packages:/home/app/.nuget/packages"
+    - "/Users/logic/Documents/GitHub/black_follow_backend/Moi:/app:rw"
+    - "/Users/logic/Documents/GitHub/black_follow_backend:/src:rw"
+    working_dir: "/app"

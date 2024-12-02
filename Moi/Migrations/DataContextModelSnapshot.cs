@@ -48,7 +48,7 @@ namespace GaragesStructure.Migrations
                         new
                         {
                             Id = new Guid("395849e7-033a-4ca0-8f7c-fc03d0eecdaa"),
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 268, DateTimeKind.Utc).AddTicks(5500),
+                            CreationDate = new DateTime(2024, 10, 7, 0, 34, 43, 402, DateTimeKind.Utc).AddTicks(7690),
                             Deleted = false,
                             Icon = "Attachments/364800c2-c094-46cb-add5-7dc3f416403d.png",
                             Name = "Facebook"
@@ -86,9 +86,6 @@ namespace GaragesStructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("AcceptedUserId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("Count")
                         .HasColumnType("integer");
 
@@ -121,8 +118,6 @@ namespace GaragesStructure.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AcceptedUserId");
 
                     b.HasIndex("FinancialMovementId");
 
@@ -178,8 +173,8 @@ namespace GaragesStructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fd050388-859c-484b-a474-da42273b152b"),
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 268, DateTimeKind.Utc).AddTicks(5590),
+                            Id = new Guid("3bfdbe88-26d3-4c91-bbe1-9faa56b09536"),
+                            CreationDate = new DateTime(2024, 10, 7, 0, 34, 43, 402, DateTimeKind.Utc).AddTicks(7780),
                             Deleted = false,
                             Description = "add followers",
                             Icon = "Attachments/364800c2-c094-46cb-add5-7dc3f416403d.png",
@@ -223,7 +218,7 @@ namespace GaragesStructure.Migrations
                         {
                             Id = new Guid("395849e7-033a-4ca0-8f7c-fc03d0eeadaa"),
                             CategoriesId = new Guid("395849e7-033a-4ca0-8f7c-fc03d0eecdaa"),
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 268, DateTimeKind.Utc).AddTicks(5550),
+                            CreationDate = new DateTime(2024, 10, 7, 0, 34, 43, 402, DateTimeKind.Utc).AddTicks(7740),
                             Deleted = false,
                             Icon = "Attachments/364800c2-c094-46cb-add5-7dc3f416403d.png",
                             Name = "Facebook"
@@ -289,12 +284,12 @@ namespace GaragesStructure.Migrations
                             Id = new Guid("395849e7-033a-4ca0-8f7c-fc03d0eeedaa"),
                             Account = 0,
                             Balance = 0m,
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 134, DateTimeKind.Utc).AddTicks(3080),
+                            CreationDate = new DateTime(2024, 10, 7, 0, 34, 43, 309, DateTimeKind.Utc).AddTicks(1270),
                             Deleted = false,
                             Email = "bbbeat114@gmail.com",
                             FullName = "ali",
                             IsActive = true,
-                            Password = "$2a$10$0uH.g5mXaIHiwnKrnOLbH.bSojYoE2L3SHY7xLfXxvPit.VAqZi7m",
+                            Password = "$2a$10$cbp1mM40EOInsDmUcN7FIepqTfyE1GmubQ3OeyC22PX0DGAzcs1gC",
                             RoleId = new Guid("395849e7-033a-4ca0-8f7c-fc03d0943daa"),
                             Username = "ali"
                         });
@@ -494,14 +489,14 @@ namespace GaragesStructure.Migrations
                         new
                         {
                             Id = new Guid("395849e7-033a-4ca0-8f7c-fc03d0943daa"),
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 134, DateTimeKind.Utc).AddTicks(3020),
+                            CreationDate = new DateTime(2024, 10, 7, 0, 34, 43, 309, DateTimeKind.Utc).AddTicks(1210),
                             Deleted = false,
                             Name = "User"
                         },
                         new
                         {
                             Id = new Guid("395849e7-033a-4ca0-8f7c-fc03d0943dab"),
-                            CreationDate = new DateTime(2024, 9, 1, 18, 11, 32, 134, DateTimeKind.Utc).AddTicks(3030),
+                            CreationDate = new DateTime(2024, 10, 7, 0, 34, 43, 309, DateTimeKind.Utc).AddTicks(1230),
                             Deleted = false,
                             Name = "Admin"
                         });
@@ -566,12 +561,6 @@ namespace GaragesStructure.Migrations
 
             modelBuilder.Entity("BackEndStructuer.Entities.Order", b =>
                 {
-                    b.HasOne("GaragesStructure.Entities.AppUser", "AcceptedUser")
-                        .WithMany("Orders")
-                        .HasForeignKey("AcceptedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BackEndStructuer.Entities.FinancialMovement", "FinancialMovement")
                         .WithMany()
                         .HasForeignKey("FinancialMovementId")
@@ -585,12 +574,10 @@ namespace GaragesStructure.Migrations
                         .IsRequired();
 
                     b.HasOne("GaragesStructure.Entities.AppUser", "User")
-                        .WithMany("AcceptedOrders")
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AcceptedUser");
 
                     b.Navigation("FinancialMovement");
 
@@ -697,8 +684,6 @@ namespace GaragesStructure.Migrations
 
             modelBuilder.Entity("GaragesStructure.Entities.AppUser", b =>
                 {
-                    b.Navigation("AcceptedOrders");
-
                     b.Navigation("FinancialMovements");
 
                     b.Navigation("Orders");
