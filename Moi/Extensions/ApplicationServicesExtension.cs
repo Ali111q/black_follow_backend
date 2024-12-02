@@ -7,9 +7,7 @@ using GaragesStructure.Helpers;
 using GaragesStructure.Repository;
 using GaragesStructure.Services;
 using GaragesStructure.Services.Referances;
-using Hangfire;
-using Hangfire.MemoryStorage;
-using Hangfire.PostgreSql;
+
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using RestSharp;
 
@@ -26,11 +24,7 @@ namespace GaragesStructure.Extensions
             services.AddFluentValidationRulesToSwagger();
 
 
-            services.AddHangfire((sp, config) =>
-            {
-                var connection = sp.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection");
-                config.UsePostgreSqlStorage(connection);
-            });
+           
 
 
             services.AddAutoMapper(typeof(UserMappingProfile).Assembly);

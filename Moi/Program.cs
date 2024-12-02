@@ -3,7 +3,7 @@ using System.Text;
 using GaragesStructure.Extensions;
 using GaragesStructure.Helpers;
 using FluentValidation.AspNetCore;
-using Hangfire;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Serilog;
@@ -41,7 +41,7 @@ builder.Services.AddFluentValidation(config => {
 });
 
 
-builder.Services.AddHangfireServer();
+
 
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient();
@@ -88,9 +88,13 @@ app.UseSwaggerUI(options =>
 });
 
 app.UseHttpsRedirection();
-app.UseHangfireDashboard();
+// app.UseHangfireDashboard();
 app.UseCors("AllowAllOrigins");
 
+if (app.Environment.IsDevelopment())
+{
+    app.ApplyMigrations();
+}
 
 
 app.UseMiddleware<CustomPayloadTooLargeMiddleware>();
